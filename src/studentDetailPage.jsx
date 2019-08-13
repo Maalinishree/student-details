@@ -12,7 +12,6 @@ import {
 import { connect } from "react-redux";
 import * as actionCreator from "./store/action";
 
-var barChartVal = [];
 var value = [];
 var path = [];
 var markValues = [];
