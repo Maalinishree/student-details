@@ -11,6 +11,7 @@ import {
 } from "recharts";
 import { connect } from "react-redux";
 import * as actionCreator from "./store/action";
+import { message } from "antd";
 
 var value = [];
 var path = [];
@@ -22,21 +23,26 @@ class StudentDetail extends Component {
       barValue: []
     };
   }
-  componentWillMount() {
+ 
+  componentDidMount() {
     markValues = [];
     value = [];
-  }
-  componentDidMount() {
     if (this.props.studentData.length === 0) {
       this.props.getStudentData().then(() => {
         path = this.props.location.pathname.split("/");
+        try{
         for (var key in Object.values(this.props.studentData[path[1]])) {
           value.push(Object.values(this.props.studentData[path[1]])[key]);
         }
+      
         for (key in value[3]) {
           markValues.push({ key: key, marks: value[3][key] });
         }
         this.setState({ barValue: markValues });
+      }catch(e){
+        message.error("sorry data not found");
+       this.props.history.push(`/`);
+      }
       });
     } else {
       for (var key in Object.values(this.props.location.state.data)) {

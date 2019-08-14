@@ -109,7 +109,6 @@ class Student extends Component {
     this.setState({ studentDetails: studentData });
   };
   render() {
-    console.log("data", this.state);
     return (
       <div>
         <div className="headerStyle">
