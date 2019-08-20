@@ -12,8 +12,7 @@ import {
 import { connect } from "react-redux";
 import * as actionCreator from "./store/action";
 import { message  } from "antd";
-import DropDownStyle from "./dropDownStyle";
-import DropDownCss from "./dropDownCss";
+import DropDown from "./dropDown";
 
 
 var value = [];
@@ -87,15 +86,15 @@ class StudentDetail extends Component {
             </BarChart>
           </div>
           <div className="divStyle">
-          <DropDownStyle/>
+          <DropDown hasDisplayImage={true}/>
           </div>
           <div className ="space"/>
           <div className="divStyle">
-          <DropDownStyle/>
+          <DropDown type={"radio"}/>
           </div>
           <div className ="space"/>
           <div className="divStyle">
-          <DropDownCss/>
+          <DropDown/>
           </div>
           <div className ="space"/>
         </div>
