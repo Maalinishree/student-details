@@ -14,7 +14,7 @@ class Student extends Component {
       studentDetails: []
     };
   }
-  componentWillMount() {
+  componentDidMount() {
    
     if (this.props.studentData.length === 0) {
       this.props.getStudentData().then(() => {
