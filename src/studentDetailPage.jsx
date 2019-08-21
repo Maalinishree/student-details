@@ -11,9 +11,8 @@ import {
 } from "recharts";
 import { connect } from "react-redux";
 import * as actionCreator from "./store/action";
-import { message  } from "antd";
+import { message } from "antd";
 import DropDown from "./dropDown";
-
 
 var value = [];
 var path = [];
@@ -23,7 +22,7 @@ class StudentDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      barValue: [],
+      barValue: []
     };
   }
 
@@ -57,7 +56,7 @@ class StudentDetail extends Component {
       this.setState({ barValue: markValues });
     }
   }
-  
+
   render() {
     return (
       <div>
@@ -86,17 +85,17 @@ class StudentDetail extends Component {
             </BarChart>
           </div>
           <div className="divStyle">
-          <DropDown hasDisplayImage={true}/>
+            <DropDown id={0} hasDisplayImage={true} />
           </div>
-          <div className ="space"/>
+          <div className="space" />
           <div className="divStyle">
-          <DropDown type={"radio"}/>
+            <DropDown id={1} type={"radio"} />
           </div>
-          <div className ="space"/>
+          <div className="space" />
           <div className="divStyle">
-          <DropDown/>
+            <DropDown id={2} />
           </div>
-          <div className ="space"/>
+          <div className="space" />
         </div>
       </div>
     );
