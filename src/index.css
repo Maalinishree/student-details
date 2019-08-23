@@ -71,14 +71,17 @@ outline:none
   justify-content: center;
 }
 .dropdown {
+  cursor: pointer;
+  position: relative;
+  display: inline-block;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   width: 50px;;
   height: 30px;
   text-align: center;
   font-size: 15px;
-
 }
-#dropdown-content {
+.dropdown-content {
+  cursor: pointer;
   display: none;
   position: absolute;
   background-color: #f9f9f9;
@@ -106,4 +109,18 @@ label{
   height: 200px;
   width: 300px;
   box-shadow: 0px 18px 26px 0px rgba(0,0,0,0.2);
+}
+.dropdownTop{
+  top: 40px;
+  display: block;
+}
+.dropdownBottom{    
+  display: block; 
+  bottom: 40px;
+}
+button{
+  height:30px;
+  width: 50px;
+  box-shadow: 0px 18px 26px 0px rgba(0,0,0,0.2);
+  border:none;
 }

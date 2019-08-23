@@ -5,6 +5,7 @@ import {
   Switch
 } from "react-router-dom";
 
+
 const StudentDashboard = lazy(() => import("./student"));
 const StudentDetails = lazy(() => import("./studentDetailPage"));
 

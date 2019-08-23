@@ -85,7 +85,7 @@ class StudentDetail extends Component {
             </BarChart>
           </div>
           <div className="divStyle">
-            <DropDown id={0} hasDisplayImage={true} />
+            <DropDown id={0} type={"checkbox"} />
           </div>
           <div className="space" />
           <div className="divStyle">

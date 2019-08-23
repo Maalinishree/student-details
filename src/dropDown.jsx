@@ -1,120 +1,137 @@
-import React, { useEffect, useRef } from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-var displayFlag = false;
-const DropDown = props => {
-  const { name } = props;
-  var element, elems;
-  window.onclick = function(event) {
-    if (!event.target.matches(".dropdown")) {
-      if (
-        event.target.matches(".dropdown-content") ||
-        event.target.matches(".dropdown-content *")
-      ) {
-        event.stopPropagation();
-        return;
-      }
-      var i;
-      displayFlag = false;
-      element = document.getElementsByClassName(`styleDropDown-${props.id}`);
-      console.log("ClassName",`styleDropDown-${props.id}`)
-      for (i = 0; i < element.length; i += 1) {
-        console.log("simple element",element[i]);
-        element[i].style.visibility = "hidden";
-        console.log(element[i].style.visibility);
-      }
-      console.log("flagin on click",displayFlag);
+var displayFlag = "dropdownTop";
+
+var element, elems;
+class DropDown extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      selecteditem: [],
+      open:true
+    };
+    this.setWrapperRef = this.setWrapperRef.bind(this);
+    this.handleClickOutside = this.handleClickOutside.bind(this);
+  }
+
+  componentDidMount() {
+    document.addEventListener("mousedown", this.handleClickOutside);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener("mousedown", this.handleClickOutside);
+  }
+
+  setWrapperRef(node) {
+    this.wrapperRef = node;
+  }
+
+  handleClickOutside(event) {
+    if (
+      event.target.matches(".dropdown-content *") ||
+      event.target.matches(".dropdown-content")
+    ) {
+      event.stopPropagation();
+    } else if (event.target.matches(".dropdown")) {
+    } else {
+      this.hide();
     }
+  }
+  hide = () => {
+    var i;
+    element = document.getElementsByClassName("dropdown-content");
+    for (var i = 0; i < element.length; i += 1) {
+      if (element[i].classList.contains(displayFlag)) {
+        element[i].classList.remove(displayFlag);
+      }
+    }
+    // this.setState(state => {
+    //   return {
+    //     open: !state.open,
+    //   };
+    // });
+  };
+  handleClick = (value) => {
+    let { selecteditem }= this.state;
+    let currentSelectedItem = Object.assign([], selecteditem);
+   
+   if(this.props.type === "checkbox"){
+     if(selecteditem.includes(value)){
+       selecteditem.splice(selecteditem.indexOf(value),1);
+     }
+     else{
+       selecteditem.push(value);
+     }
+      this.setState({selecteditem:selecteditem});
+   }
+   else{
+     console.log("selected value",value);
+     currentSelectedItem=[];
+     currentSelectedItem.push(value);
+     this.setState({
+       selecteditem: currentSelectedItem});
+   }
+  };
+  handleCheckboxValue = () => {
+   console.log("selected value", this.state.selecteditem);
+   this.hide();
+  }
+  divposition = e => {
+    var diff = window.innerHeight - e.screenY;
+    if (diff < 50) {
+      displayFlag = "dropdownBottom";
+    } else {
+      displayFlag = "dropdownTop";
+    }
+    this.toggleFunction(displayFlag);
+  };
+  toggleFunction = flag => {
+    elems = document.getElementById(`styleDropDown-${this.props.id}`);
+    elems.classList.toggle(flag);
   };
 
-  const divposition = e => {
-    console.log("first",displayFlag);
-    if (displayFlag === false) {
-      displayFlag = true;
-      var diff = window.innerHeight - e.screenY;
-      elems = document.getElementsByClassName(`styleDropDown-${props.id}`);
-      console.log("class name in divposition",`styleDropDown-${props.id}`);
-      for (var i = 0; i < elems.length; i += 1) {
-        elems[i].style.visibility = "visible";
-        elems[i].style.display = "block";
-        if (diff < 50) {
-          elems[i].style.bottom = "40px";
-          elems[i].style.top = null;
-        } else {
-          elems[i].style.bottom = null;
-          elems[i].style.top = "40px";
-        }
-      }
-    } else {
-      var i;
-      displayFlag = false;
-      element = document.getElementsByClassName(`styleDropDown-${props.id}`);
-      console.log("class name in divposition to hide",`styleDropDown-${props.id}`);
-      for (i = 0; i < element.length; i += 1) {
-        element[i].style.visibility = "hidden";
-        console.log(element[i].style.visibility);
-      }
-    }
-    console.log("end",displayFlag);
-  };
-  return (
-    <div>
-      {props.hasDisplayImage === false ? (
-        <div className="dropdown-1">
-          <div onClick={event => divposition(event)} className="dropdown">
+  render() {
+    const { dropdownInput } = this.props;
+    const { selecteditem }= this.state;
+    return (
+      <div>
+        <div className="dropdown-1" ref={this.setWrapperRef}>
+          <div onClick={event => this.divposition(event)} className="dropdown">
             ...
           </div>
-          {props.type === "radio" ? (
-            <div id="dropdown-content" className={`styleDropDown-${props.id}`}>
-              {name.map(element => (
-                <div key={element} className="container">
-                  <input
-                    type={props.type}
-                    value={element}
-                    id={element}
-                    name={props.nameValue}
-                  />
-                  <label for={element}>{element}</label>
-                  <span class="checkmark" />
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div id="dropdown-content" className={`styleDropDown-${props.id}`}>
-            {name.map(element => (
-              <div key={element} className="container">
+          {/* {this.state.open && ( */}
+          <div
+            className={`dropdown-content styleDropDown-${this.props.id}`}
+            id={`styleDropDown-${this.props.id}`}
+          >
+            {dropdownInput.map((element) => {
+              return <div key={element.value} className="container">
+                 <label>
                 <input
-                  type={props.type}
-                  value={element}
-                  id={element}
-                  name={element}
+                  type={this.props.type}
+                  value={element.value}
+                  checked={selecteditem.includes(element.value)}
+                  onClick={() => this.handleClick(element.value)}
                 />
-                <label for={element}>{element}</label>
-                <span class="checkmark" />
+                {element.name}
+               </label>
               </div>
-            ))}
+            })}
+            {this.props.type === "checkbox" ? (
+              <button onClick={() => this.handleCheckboxValue()}>save</button>
+            ) : null}
           </div>
-          )}
+          {/* ) } */}
         </div>
-      ) : (
-        <div>
-          <img
-            src={props.imageUrl}
-            className="imageStyle"
-            alt="Loading Image"
-          />
-        </div>
-      )}
-    </div>
-  );
-};
+      </div>
+    );
+  }
+}
 
 DropDown.defaultProps = {
-  name: ["hello", "hii", "hey"],
-  type: "checkbox",
+  dropdownInput: [{name:"John", value:"john"},{name:"Mark", value:"mark"},{name:"Peter", value:"peter"},{name:"Stark",value:"stark"}],
+  type: "radio",
   nameValue: "name",
-  hasDisplayImage: false,
-  imageUrl:
-    "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1200px-React-icon.svg.png"
 };
 
 DropDown.propTypes = {
